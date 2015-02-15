@@ -18,7 +18,7 @@ ITEM_RF_LINE = 'For M5|Adr{0:>6}|KD1{1:>9}{2:6}{3:<12}1|Rf{4:>15} m   |HD{5:>15}
 ITEM_FOOTER_LINE = 'For M5|Adr{0:>6}|KD1{1:>9}{2:6}{3:<12}1|{4:22}|{5:22}|Z{6:>16} m   |'
 
 PAGE_FOOTER_FIRST_LINE = 'For M5|Adr{0:>6}|KD1{1:>9}{2:18}1|{3:<2}{4:15} m   |{5:<2}{6:>15} m   |Z{7:>16} m   |'
-PAGE_FOOTER_SECOND_LINE = 'For M5|Adr{0:>6}|KD1{1:>9}{2:18}1|{3:<2}{4:15} m   |{5:<2}{6:>15} m   |Z{7:>16} m   |'
+PAGE_FOOTER_SECOND_LINE = 'For M5|Adr{0:>6}|KD2{1:>9}{2:9}{3:9}1|{4:<2}{5:15} m   |{6:<2}{7:>15} m   |Z{8:>16} m   |'
 PAGE_FOOTER_THIRD_LINE = 'For M5|Adr{0:>6}|TO  End-Line{1:18}1|{2:22}|{3:22}|{4:22}|'
 '''
 For M5|Adr     1|TO  1215bbb.dat                |                      |                      |                      |
@@ -114,20 +114,20 @@ def formatData(data, footer):
 
     for d in data:
         if data.index(d) == 0:
-            item_line_format = (line_index, d[0], '', d[6], d[3], d[1], '')
+            item_line_format = (line_index, d[0], '', d[6], str(d[3]).ljust(7, '0'), str(d[1]).ljust(6, '0'), '')
             result_list.append(ITEM_RB_LINE.format(*item_line_format))
             line_index += 1
 
-            item_line_format = (line_index, d[0], '', d[7], d[4], d[2], '')
+            item_line_format = (line_index, d[0], '', d[7], str(d[4]).ljust(7, '0'), str(d[2]).ljust(6, '0'), '')
             result_list.append(ITEM_RB_LINE.format(*item_line_format))
             line_index += 1
 
         elif data.index(d) == 1:
-            item_line_format = (line_index, d[0], '', d[6], d[3], d[1], '')
+            item_line_format = (line_index, d[0], '', d[6], str(d[3]).ljust(7, '0'), str(d[1]).ljust(6, '0'), '')
             result_list.append(ITEM_RF_LINE.format(*item_line_format))
             line_index += 1
 
-            item_line_format = (line_index, d[0], '', d[7], d[4], d[2], '')
+            item_line_format = (line_index, d[0], '', d[7], str(d[4]).ljust(7, '0'), str(d[2]).ljust(6, '0'), '')
             result_list.append(ITEM_RF_LINE.format(*item_line_format))
             line_index += 1
 
@@ -137,39 +137,38 @@ def formatData(data, footer):
 
         else:
             if len(d) == 7:
-                item_line_format = (line_index, d[0], '', d[5], d[3], d[1], '')
+                item_line_format = (line_index, d[0], '', d[5], str(d[3]).ljust(7, '0'), str(d[1]).ljust(6, '0'), '')
                 result_list.append(ITEM_RB_LINE.format(*item_line_format))
                 line_index += 1
 
-                item_line_format = (line_index, d[0], '', d[6], d[4], d[2], '')
+                item_line_format = (line_index, d[0], '', d[6], str(d[4]).ljust(7, '0'), str(d[2]).ljust(6, '0'), '')
                 result_list.append(ITEM_RB_LINE.format(*item_line_format))
                 line_index += 1
 
             else:
-                item_line_format = (line_index, d[0], '', d[6], d[3], d[1], '')
+                item_line_format = (line_index, d[0], '', d[6], str(d[3]).ljust(7, '0'), str(d[1]).ljust(6, '0'), '')
                 result_list.append(ITEM_RF_LINE.format(*item_line_format))
                 line_index += 1
 
-                item_line_format = (line_index, d[0], '', d[7], d[4], d[2], '')
+                item_line_format = (line_index, d[0], '', d[7], str(d[4]).ljust(7, '0'), str(d[2]).ljust(6, '0'), '')
                 result_list.append(ITEM_RF_LINE.format(*item_line_format))
                 line_index += 1
 
-                item_footer_format = (line_index, d[0], '', d[7][0:-1], '', '', d[5])
+                t = d[7].strip()[0:-1]
+                item_footer_format = (line_index, d[0], '', t, '', '', d[5])
                 result_list.append(ITEM_FOOTER_LINE.format(*item_footer_format))
                 line_index += 1
 
-
-
     page_footer_first_format = (line_index, footer[0][1], '', footer[1][0], footer[1][1], footer[1][2], footer[1][3],
                                 str(footer[1][5]).ljust(7, '0'))
-    page_footer_second_format = (line_index, footer[0][1], '', footer[2][0], footer[2][1], footer[2][2], footer[2][3],
+    line_index += 1
+    page_footer_second_format = (line_index, footer[0][1], int(footer[0][4]),'', footer[2][0], footer[2][1], footer[2][2], footer[2][3],
                                  str(footer[2][5]).ljust(7, '0'))
+    line_index += 1
     page_footer_third_format = (line_index, '', '', '', '')
 
     result_list.append(PAGE_FOOTER_FIRST_LINE.format(*page_footer_first_format))
-    line_index += 1
     result_list.append(PAGE_FOOTER_SECOND_LINE.format(*page_footer_second_format))
-    line_index += 1
     result_list.append(PAGE_FOOTER_THIRD_LINE.format(*page_footer_third_format))
 
     return result_list
@@ -204,3 +203,39 @@ if __name__ == '__main__':
         print file_path +' transform complete!'
 
         print '******************************************************'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
